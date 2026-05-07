@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YABATECH Smart School Navigation System</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <style>
+    /* CSS Section */
+    * {
+      [span_2](start_span)box-sizing: border-box;[span_2](end_span)
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fb;
+      [span_3](start_span)color: #1f2937;[span_3](end_span)
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f5c2e, #134e4a);
+      color: white;
+      padding: 60px 20px;
+      [span_4](start_span)text-align: center;[span_4](end_span)
+    }
+
+    .hero-content h1 {
+      margin: 0 0 10px;
+      [span_5](start_span)font-size: 2.2rem;[span_5](end_span)
+    }
+
+    .hero-content p {
+      margin: 0;
+      font-size: 1.05rem;
+      [span_6](start_span)opacity: 0.95;[span_6](end_span)
+    }
+
+    .container {
+      width: min(1200px, 92%);
+      margin: 0 auto;
+      [span_7](start_span)padding: 30px 0 50px;[span_7](end_span)
+    }
+
+    .intro,
+    .section-title {
+      text-align: center;
+      [span_8](start_span)margin-bottom: 25px;[span_8](end_span)
+    }
+
+    .intro h2,
+    .section-title h2,
+    .map-section h2 {
+      [span_9](start_span)margin-bottom: 8px;[span_9](end_span)
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      [span_10](start_span)margin-bottom: 30px;[span_10](end_span)
+    }
+
+    .control-card {
+      width: 100%;
+      max-width: 700px;
+      background: white;
+      border-radius: 16px;
+      padding: 22px;
+      [span_11](start_span)box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);[span_11](end_span)
+    }
+
+    .control-card h3 {
+      [span_12](start_span)margin-top: 0;[span_12](end_span)
+    }
+
+    label {
+      display: block;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      [span_13](start_span)font-weight: 600;[span_13](end_span)
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      background: white;
+      [span_14](start_span)font-size: 1rem;[span_14](end_span)
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+      [span_15](start_span)flex-wrap: wrap;[span_15](end_span)
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      background: #0f5c2e;
+      [span_16](start_span)color: white;[span_16](end_span)
+    }
+
+    button:hover {
+      [span_17](start_span)opacity: 0.92;[span_17](end_span)
+    }
+
+    .secondary-btn {
+      [span_18](start_span)background: #334155;[span_18](end_span)
+    }
+
+    .route-message {
+      margin-top: 16px;
+      min-height: 22px;
+      color: #0f5c2e;
+      [span_19](start_span)font-weight: 600;[span_19](end_span)
+    }
+
+    .building-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      [span_20](start_span)margin-bottom: 35px;[span_20](end_span)
+    }
+
+    .building-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      [span_21](start_span)transition: transform 0.2s ease, box-shadow 0.2s ease;[span_21](end_span)
+    }
+
+    .building-card:hover {
+      transform: translateY(-4px);
+      [span_22](start_span)box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);[span_22](end_span)
+    }
+
+    .building-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      [span_23](start_span)display: block;[span_23](end_span)
+    }
+
+    .building-card .card-body {
+      [span_24](start_span)padding: 14px 16px 18px;[span_24](end_span)
+    }
+
+    .building-card h3 {
+      margin: 0 0 8px;
+      [span_25](start_span)font-size: 1.05rem;[span_25](end_span)
+    }
+
+    .building-card p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 0.95rem;
+      [span_26](start_span)line-height: 1.4;[span_26](end_span)
+    }
+
+    .map-section {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      [span_27](start_span)box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);[span_27](end_span)
+    }
+
+    #map {
+      width: 100%;
+      height: 520px;
+      border-radius: 14px;
+      [span_28](start_span)margin-top: 10px;[span_28](end_span)
+    }
+
+    @media (max-width: 640px) {
+      .hero-content h1 {
+        [span_29](start_span)font-size: 1.7rem;[span_29](end_span)
+      }
+      .control-card {
+        [span_30](start_span)padding: 16px;[span_30](end_span)
+      }
+      #map {
+        [span_31](start_span)height: 420px;[span_31](end_span)
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-content">
+      <h1>YABATECH Smart School Navigation System</h1>
+      <p>Find buildings, view their pictures, and trace routes across campus.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      <h2>Campus Navigation</h2>
+      [span_32](start_span)<p>Choose a building to view it on the map, then select a start point and destination to display the route.[span_32](end_span)</p>
+    </section>
+
+    <section class="controls">
+      <div class="control-card">
+        <h3>Get Directions</h3>
+        <label for="from">From</label>
+        <select id="from">
+          <option value="">Select starting point</option>
+        </select>
+
+        <label for="to">To</label>
+        <select id="to">
+          <option value="">Select destination</option>
+        </select>
+
+        <div class="button-row">
+          <button id="showRouteBtn">Show Route</button>
+          <button id="resetBtn" class="secondary-btn">Reset</button>
+        </div>
+        <p id="routeMessage" class="route-message"></p>
+      </div>
+    </section>
+
+    <section class="section-title">
+      <h2>Buildings Menu</h2>
+      <p>Click any building card to zoom to it on the map.</p>
+    </section>
+
+    [span_33](start_span)<section id="buildingGrid" class="building-grid"></section>[span_33](end_span)
+
+    <section class="map-section">
+      <h2>Campus Map</h2>
+      [span_34](start_span)<div id="map"></div>[span_34](end_span)
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    // JavaScript Section
+    const buildings = [
+      { name:"ETF Building", coords:[6.51773,3.37614], image:"https://picsum.photos/400/250?random=1", description:"Engineering Technology Faculty Building" },
+      { name:"New Building", coords:[6.51810,3.37670], image:"https://picsum.photos/400/250?random=2", description:"YABATECH New Academic Building" },
+      { name:"SMBS Building", coords:[6.51720,3.37560], image:"https://picsum.photos/400/250?random=3", description:"School of Management and Business Studies" },
+      { name:"Science Building", coords:[6.51680,3.37680], image:"https://picsum.photos/400/250?random=4", description:"School of Science Building" },
+      { name:"Arts Complex", coords:[6.51840,3.37590], image:"https://picsum.photos/400/250?random=5", description:"Arts and Design Complex" },
+      { name:"Envs Building", coords:[6.51700,3.37720], image:"https://picsum.photos/400/250?random=6", description:"School of Environmental Studies" },
+      { name:"CE Building", coords:[6.51800,3.37750], image:"https://picsum.photos/400/250?random=7", description:"Computer Engineering Department" },
+      { name:"Okuffi Hall 1 & 2", coords:[6.51650,3.37590], image:"https://picsum.photos/400/250?random=8", description:"Okuffi Student Hostel" }
+    [span_35](start_span)];[span_35](end_span)
+
+    [span_36](start_span)const map = L.map('map').setView([6.51773,3.37614], 17);[span_36](end_span)
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution:'© OpenStreetMap Contributors'
+    [span_37](start_span)}).addTo(map);[span_37](end_span)
+
+    const buildingGrid = document.getElementById('buildingGrid');
+    const fromSelect = document.getElementById('from');
+    const toSelect = document.getElementById('to');
+    const routeMessage = document.getElementById('routeMessage');
+    const showRouteBtn = document.getElementById('showRouteBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let routeLine = null;
+    [span_38](start_span)const markerMap = {};[span_38](end_span)
+
+    function initBuildings(){
+      buildings.forEach(building => {
+        let option1 = document.createElement('option');
+        option1.value = building.name;
+        option1.textContent = building.name;
+        [span_39](start_span)fromSelect.appendChild(option1);[span_39](end_span)
+
+        let option2 = document.createElement('option');
+        option2.value = building.name;
+        option2.textContent = building.name;
+        [span_40](start_span)toSelect.appendChild(option2);[span_40](end_span)
+
+        const card = document.createElement('div');
+        card.className = 'building-card'; [span_41](start_span)// Fixed class name to match CSS[span_41](end_span)
+        card.innerHTML = `
+          <img src="${building.image}" alt="${building.name}">
+          <div class="card-body">
+            <h3>${building.name}</h3>
+            <p>${building.description}</p>
+          </div>
+        [span_42](start_span)`;[span_42](end_span)
+
+        card.addEventListener('click', () => {
+          [span_43](start_span)map.setView(building.coords, 19);[span_43](end_span)
+          [span_44](start_span)markerMap[building.name].openPopup();[span_44](end_span)
+        });
+
+        [span_45](start_span)buildingGrid.appendChild(card);[span_45](end_span)
+
+        [span_46](start_span)const marker = L.marker(building.coords).addTo(map);[span_46](end_span)
+        [span_47](start_span)marker.bindPopup(`<b>${building.name}</b><br>${building.description}`);[span_47](end_span)
+        [span_48](start_span)markerMap[building.name] = marker;[span_48](end_span)
+      });
+    }
+
+    function showRoute(){
+      const from = fromSelect.value;
+      [span_49](start_span)const to = toSelect.value;[span_49](end_span)
+
+      if(!from || !to){
+        [span_50](start_span)routeMessage.textContent = "Please select both locations.";[span_50](end_span)
+        return;
+      }
+      if(from === to){
+        [span_51](start_span)routeMessage.textContent = "Choose different buildings.";[span_51](end_span)
+        return;
+      }
+
+      [span_52](start_span)const start = buildings.find(b => b.name === from);[span_52](end_span)
+      [span_53](start_span)const end = buildings.find(b => b.name === to);[span_53](end_span)
+
+      if(routeLine){ map.removeLayer(routeLine); [span_54](start_span)}
+
+      routeLine = L.polyline([start.coords, end.coords], {
+        color:'blue',
+        weight:5,
+        dashArray:'10,10'
+      }).addTo(map);[span_54](end_span)
+
+      [span_55](start_span)map.fitBounds(routeLine.getBounds());[span_55](end_span)
+
+      [span_56](start_span)const distance = (map.distance(start.coords, end.coords) / 1000).toFixed(2);[span_56](end_span)
+      routeMessage.textContent = `Showing route from ${from} to ${to}. [span_57](start_span)Distance: ${distance} km`;[span_57](end_span)
+    }
+
+    function resetMap(){
+      if(routeLine){
+        map.removeLayer(routeLine);
+        routeLine = null;
+      [span_58](start_span)}
+      fromSelect.value = '';
+      toSelect.value = '';
+      routeMessage.textContent = '';
+      map.setView([6.51773,3.37614], 17);[span_58](end_span)
+    }
+
+    [span_59](start_span)showRouteBtn.addEventListener('click', showRoute);[span_59](end_span)
+    [span_60](start_span)resetBtn.addEventListener('click', resetMap);[span_60](end_span)
+
+    [span_61](start_span)initBuildings();[span_61](end_span)
+  </script>
+</body>
+</html>
